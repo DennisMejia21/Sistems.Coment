@@ -1,0 +1,10 @@
+# Ignorar configuraciones locales con credenciales
+.env
+
+# Ignorar las carpetas de dependencias de Node/React (pesan demasiado)
+frontend/node_modules/
+frontend/dist/
+
+# Archivos sueltos del sistema operativo
+.DS_Store
+Thumbs.db

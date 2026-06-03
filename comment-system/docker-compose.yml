@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  # --- SERVICIO 1: BASE DE DATOS (MySQL) ---
+  db:
+    image: mysql:8.0
+    container_name: comentarios_db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    ports:
+      - "3308:3306"
+    volumes:
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - datos_mysql:/var/lib/mysql
+    networks:
+      - red-comentarios
+
+  # --- SERVICIO 2: BACKEND (PHP) ---
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: comentarios_backend
+    restart: always
+    ports:
+      - "${PUERTO_BACKEND}:80"
+    volumes:
+      - ./backend:/var/www/html
+    environment:
+      SQL_SERVER: db
+      USERS_PASSWORD: ${MYSQL_PASSWORD}
+    depends_on:
+      - db
+    networks:
+      - red-comentarios
+
+  # --- SERVICIO 3: FRONTEND (React) ---
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: comentarios_frontend
+    restart: always
+    ports:
+      - "${PUERTO_FRONTEND}:${PUERTO_FRONTEND}"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    networks:
+      - red-comentarios
+
+volumes:
+  datos_mysql:
+
+networks:
+  red-comentarios:
+    driver: bridge

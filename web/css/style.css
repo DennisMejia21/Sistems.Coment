@@ -1,0 +1,84 @@
+/* css/style.css */
+.home-ico {
+  font-size: 25px;
+}
+
+/* 1. CONFIGURACIÓN DEL CONTENEDOR PADRE */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Ocupa el 100% del alto de la ventana */
+  margin: 0;         /* Elimina los márgenes por defecto del navegador */
+  font-family: sans-serif;
+}
+
+/* 2. BLOQUES VERTICALES */
+header {
+  background-color: #ffdde1; /* Rosa pastel */
+  text-align: center;
+}
+
+nav {
+  background-color: #d4edda; /* Verde pastel */
+  padding: 10px;
+  text-decoration: none;
+}
+
+nav a {
+    text-decoration: none;
+}
+
+footer {
+  background-color: #d1ecf1; /* Celeste pastel */
+  padding: 20px;
+  text-align: center;
+}
+
+/* 3. EL CONTENEDOR CENTRAL */
+main {
+  display: flex;    /* Hace que el aside y el content se pongan uno al lado del otro */
+  flex: 1;          /* Estira el main verticalmente para empujar al footer al fondo */
+  background-color: #fff3cd; /* Amarillo pastel (de fondo por si acaso) */
+}
+
+/* 4. BLOQUES HORIZONTALES (DENTRO DE MAIN) */
+aside {
+  background-color: #e2e3e5; /* Gris pastel para el Sidebar */
+  width: 250px;              /* Ancho fijo para la barra lateral */
+  padding: 20px;
+  box-sizing: border-box;    /* Asegura que el padding no rompa el ancho de 250px */
+}
+
+aside a {
+    text-decoration: none;
+}
+
+input, select, textarea {
+  padding: 5px;
+  margin: 5px;
+}
+
+/* 5. EL CONTENIDO DE TODAS LAS PAGINAS */
+.content {
+  background-color: #fafafa; /* Blanco muy suave para el contenido principal */
+  flex: 1;                   /* Hace que el contenido ocupe todo el espacio restante a la derecha */
+  padding: 20px;
+}
+
+/* 6. EL CONTENEDOR DE LOS FORMULARIOS DE LOGIN Y REGISTRO */
+.session-forms {
+  text-align: center;
+  margin-top: 20px; /* Espacio entre el footer y el nuevo div */
+}
+
+.btn {
+  padding: 5px;
+  margin: 2px;
+  text-decoration: none;
+  border: 1px solid;
+  border-radius: 5px;
+}
+
+.btn:hover {
+  background-color: #ffeedd;
+}
