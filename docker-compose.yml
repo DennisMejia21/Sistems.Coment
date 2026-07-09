@@ -1,63 +1,54 @@
-version: '3.8'
-
 services:
-  # --- SERVICIO 1: BASE DE DATOS (MySQL) ---
-  db:
+
+  php:
+    build: ./backend
+    container_name: sistema_comentarios_php
+    ports:
+      - "8080:80"
+    volumes:
+      - ./backend/src:/var/www/html
+    depends_on:
+      - mysql
+    networks:
+      - comentarios_network
+
+
+  mysql:
     image: mysql:8.0
-    container_name: comentarios_db
+    container_name: sistema_comentarios_mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: sistema_comentarios
+      MYSQL_USER: dennis
+      MYSQL_PASSWORD: 123456
     ports:
-      - "3308:3306"
+      - "3306:3306"
     volumes:
-      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
-      - datos_mysql:/var/lib/mysql
+      - mysql_data:/var/lib/mysql
     networks:
-      - red-comentarios
+      - comentarios_network
 
-  # --- SERVICIO 2: BACKEND (PHP) ---
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    container_name: comentarios_backend
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: sistema_comentarios_phpmyadmin
     restart: always
     ports:
-      - "${PUERTO_BACKEND}:80"
-    volumes:
-      - ./backend:/var/www/html
+      - "8081:80"
     environment:
-      SQL_SERVER: db
-      USERS_PASSWORD: ${MYSQL_PASSWORD}
+      PMA_HOST: mysql
+      PMA_USER: dennis
+      PMA_PASSWORD: 123456
     depends_on:
-      - db
+      - mysql
     networks:
-      - red-comentarios
+      - comentarios_network
 
-  # --- SERVICIO 3: FRONTEND (React) ---
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: comentarios_frontend
-    restart: always
-    ports:
-      - "${PUERTO_FRONTEND}:${PUERTO_FRONTEND}"
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-    depends_on:
-      - backend
-    networks:
-      - red-comentarios
-
-volumes:
-  datos_mysql:
 
 networks:
-  red-comentarios:
-    driver: bridge
+  comentarios_network:
+
+
+volumes:
+  mysql_data:
