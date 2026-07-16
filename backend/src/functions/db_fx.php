@@ -13,7 +13,7 @@ function connect()
 
     } catch (PDOException $e) {
 
-        echo "No se pudo conectar.";
+        echo "No se pudo conectar a la base de datos :(.";
 
     }
 }
